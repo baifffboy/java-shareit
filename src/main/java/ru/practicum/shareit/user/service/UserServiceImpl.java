@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Override
     public UserDto create(CreateUserRequest createUserRequest) {
@@ -28,23 +29,23 @@ public class UserServiceImpl implements UserService {
                 .anyMatch(user -> user.getEmail().equals(createUserRequest.getEmail()));
         if (emailExists)
             throw new ConflictException("Пользователь с почтой " + createUserRequest.getEmail() + " уже существует");
-        User user = UserMapper.mapToUser(createUserRequest);
+        User user = userMapper.toEntity(createUserRequest);
         User savedUser = userRepository.save(user);
         log.info("Создан пользователь с id: {}", savedUser.getId());
-        return UserMapper.mapToUserDto(savedUser);
+        return userMapper.toDto(savedUser);
     }
 
     @Override
     public UserDto findById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id " + id + " не найден"));
-        return UserMapper.mapToUserDto(user);
+        return userMapper.toDto(user);
     }
 
     @Override
     public List<UserDto> findAll() {
         return userRepository.findAll().stream()
-                .map(UserMapper::mapToUserDto)
+                .map(userMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -57,9 +58,10 @@ public class UserServiceImpl implements UserService {
                         && user.getEmail().equals(updateUserRequest.getEmail()));
         if (emailExists)
             throw new ConflictException("Пользователь с почтой " + updateUserRequest.getEmail() + " уже существует");
-        User updatedUser = userRepository.update(UserMapper.mapToUser(existingUser, updateUserRequest));
+        userMapper.updateEntity(existingUser, updateUserRequest);
+        User updatedUser = userRepository.update(existingUser);
         log.info("Обновлен пользователь с id: {}", updatedUser.getId());
-        return UserMapper.mapToUserDto(updatedUser);
+        return userMapper.toDto(updatedUser);
     }
 
     @Override

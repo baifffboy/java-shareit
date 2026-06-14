@@ -23,14 +23,16 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
+    private final ItemMapper itemMapper;
 
     @Override
     public ItemDto create(Long userId, CreateItemRequest createItemRequest) {
         User owner = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден"));
-        Item savedItem = itemRepository.save(ItemMapper.mapToItem(createItemRequest, owner));
+        Item item = itemMapper.toEntity(createItemRequest, owner);
+        Item savedItem = itemRepository.save(item);
         log.info("Создана вещь с id: {} для пользователя с id: {}", savedItem.getId(), userId);
-        return ItemMapper.mapToItemDto(savedItem);
+        return itemMapper.toDto(savedItem);
     }
 
     @Override
@@ -40,16 +42,17 @@ public class ItemServiceImpl implements ItemService {
         if (!existingItem.getOwner().getId().equals(userId)) {
             throw new NotFoundException("Редактировать вещь может только её владелец");
         }
-        Item updatedItem = itemRepository.update(ItemMapper.mapToItem(existingItem, updateItemRequest));
+        itemMapper.updateEntity(existingItem, updateItemRequest);
+        Item updatedItem = itemRepository.update(existingItem);
         log.info("Обновлена вещь с id: {}", updatedItem.getId());
-        return ItemMapper.mapToItemDto(updatedItem);
+        return itemMapper.toDto(updatedItem);
     }
 
     @Override
     public ItemDto findById(Long id) {
         Item item = itemRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Вещь с id " + id + " не найдена"));
-        return ItemMapper.mapToItemDto(item);
+        return itemMapper.toDto(item);
     }
 
     @Override
@@ -58,7 +61,7 @@ public class ItemServiceImpl implements ItemService {
             throw new NotFoundException("Пользователь с id " + userId + " не найден");
         }
         return itemRepository.findByOwnerId(userId).stream()
-                .map(ItemMapper::mapToItemDto)
+                .map(itemMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -72,7 +75,7 @@ public class ItemServiceImpl implements ItemService {
                 .filter(Item::isAvailable)
                 .filter(item -> item.getName().toLowerCase().contains(lowerCaseText) ||
                         item.getDescription().toLowerCase().contains(lowerCaseText))
-                .map(ItemMapper::mapToItemDto)
+                .map(itemMapper::toDto)
                 .collect(Collectors.toList());
     }
 }

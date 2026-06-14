@@ -1,48 +1,26 @@
 package ru.practicum.shareit.user.mapper;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import ru.practicum.shareit.user.dto.CreateUserRequest;
 import ru.practicum.shareit.user.dto.UpdateUserRequest;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.ArrayList;
-import java.util.List;
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+public interface UserMapper {
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class UserMapper {
+    UserDto toDto(User user);
 
-    public static UserDto mapToUserDto(User user) {
-        UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
-        userDto.setName(user.getName());
-        userDto.setEmail(user.getEmail());
-        userDto.setDemandItem(user.getDemandItem());
-        userDto.setSupplyItem(user.getSupplyItem());
-        return userDto;
-    }
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "demandItem", ignore = true)
+    @Mapping(target = "supplyItem", ignore = true)
+    User toEntity(CreateUserRequest createUserRequest);
 
-    public static User mapToUser(CreateUserRequest createUserRequest) {
-        User user = new User();
-        user.setName(createUserRequest.getName());
-        user.setEmail(createUserRequest.getEmail());
-        if (createUserRequest.getDemandItem() != null)
-            user.setDemandItem(new ArrayList<>(List.of(createUserRequest.getDemandItem())));
-        if (createUserRequest.getSupplyItem() != null)
-            user.setSupplyItem(new ArrayList<>(List.of(createUserRequest.getSupplyItem())));
-        return user;
-    }
-
-    public static User mapToUser(User existingUser, UpdateUserRequest updateUserRequest) {
-        if (updateUserRequest.getName() != null)
-            existingUser.setName(updateUserRequest.getName());
-        if (updateUserRequest.getEmail() != null)
-            existingUser.setEmail(updateUserRequest.getEmail());
-        if (updateUserRequest.getDemandItem() != null)
-            existingUser.setDemandItem(new ArrayList<>(List.of(updateUserRequest.getDemandItem())));
-        if (updateUserRequest.getSupplyItem() != null)
-            existingUser.setSupplyItem(new ArrayList<>(List.of(updateUserRequest.getSupplyItem())));
-        return existingUser;
-    }
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "demandItem", ignore = true)
+    @Mapping(target = "supplyItem", ignore = true)
+    void updateEntity(@MappingTarget User existingUser, UpdateUserRequest updateUserRequest);
 }

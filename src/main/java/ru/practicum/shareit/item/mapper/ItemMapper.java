@@ -1,44 +1,30 @@
 package ru.practicum.shareit.item.mapper;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import ru.practicum.shareit.item.dto.CreateItemRequest;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.UpdateItemRequest;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ItemMapper {
-    public static ItemDto mapToItemDto(Item item) {
-        ItemDto itemDto = new ItemDto();
-        itemDto.setId(item.getId());
-        itemDto.setName(item.getName());
-        itemDto.setDescription(item.getDescription());
-        itemDto.setAvailable(item.isAvailable());
-        itemDto.setReviews(item.getReviews());
-        itemDto.setCountOfRent(item.getCountOfRent());
-        return itemDto;
-    }
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+public interface ItemMapper {
 
-    public static Item mapToItem(CreateItemRequest createItemRequest, User owner) {
-        Item item = new Item();
-        item.setName(createItemRequest.getName());
-        item.setDescription(createItemRequest.getDescription());
-        item.setOwner(owner);
-        item.setAvailable(createItemRequest.getAvailable());
-        item.setCountOfRent(0L);
-        return item;
-    }
+    @Mapping(source = "available", target = "available")
+    ItemDto toDto(Item item);
 
-    public static Item mapToItem(Item existingItem, UpdateItemRequest updateItemRequest) {
-        if (updateItemRequest.getName() != null)
-            existingItem.setName(updateItemRequest.getName());
-        if (updateItemRequest.getDescription() != null)
-            existingItem.setDescription(updateItemRequest.getDescription());
-        if (updateItemRequest.getAvailable() != null)
-            existingItem.setAvailable(updateItemRequest.getAvailable());
-        if (updateItemRequest.getReview() != null) existingItem.getReviews().add(updateItemRequest.getReview());
-        return existingItem;
-    }
+    @Mapping(source = "owner", target = "owner")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "reviews", ignore = true)
+    @Mapping(target = "countOfRent", constant = "0")
+    Item toEntity(CreateItemRequest createItemRequest, User owner);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "owner", ignore = true)
+    @Mapping(target = "reviews", ignore = true)
+    @Mapping(target = "countOfRent", ignore = true)
+    void updateEntity(@MappingTarget Item existingItem, UpdateItemRequest updateItemRequest);
 }
