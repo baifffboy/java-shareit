@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.CreateUserRequest;
@@ -23,34 +24,43 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserDto createUser(@Valid @RequestBody CreateUserRequest createUserRequest) {
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody CreateUserRequest createUserRequest) {
         log.info("Отправлен запрос на создание пользователя с name: {}", createUserRequest.getName());
-        return userService.create(createUserRequest);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(userService.create(createUserRequest));
     }
 
     @GetMapping("/{id}")
-    public UserDto getUser(@PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long id) {
+    public ResponseEntity<UserDto> getUser(@PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long id) {
         log.info("Отправлен запрос на получение пользователя с id: {}", id);
-        return userService.findById(id);
+        return ResponseEntity
+                .ok()
+                .body(userService.findById(id));
     }
 
     @GetMapping
-    public List<UserDto> getAllUsers() {
+    public ResponseEntity<List<UserDto>> getAllUsers() {
         log.info("Отправлен запрос на получение всех пользователей");
-        return userService.findAll();
+        return ResponseEntity
+                .ok()
+                .body(userService.findAll());
     }
 
     @PatchMapping("/{id}")
-    public UserDto updateUser(@PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long id, @Valid @RequestBody UpdateUserRequest updateUserRequest) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long id, @Valid @RequestBody UpdateUserRequest updateUserRequest) {
         log.info("Отправлен запрос на обновление пользователя с id: {}", id);
-        return userService.update(updateUserRequest, id);
+        return ResponseEntity
+                .ok()
+                .body(userService.update(updateUserRequest, id));
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long id) {
         log.info("Отправлен запрос на удаление пользователя с id: {}", id);
         userService.delete(id);
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 }
