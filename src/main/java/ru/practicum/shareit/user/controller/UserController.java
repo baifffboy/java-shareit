@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public UserDto getUser(@PathVariable Long id) {
+    public UserDto getUser(@PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long id) {
         log.info("Отправлен запрос на получение пользователя с id: {}", id);
         return userService.findById(id);
     }
@@ -41,14 +42,14 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public UserDto updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequest updateUserRequest) {
+    public UserDto updateUser(@PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long id, @Valid @RequestBody UpdateUserRequest updateUserRequest) {
         log.info("Отправлен запрос на обновление пользователя с id: {}", id);
         return userService.update(updateUserRequest, id);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable Long id) {
+    public void deleteUser(@PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long id) {
         log.info("Отправлен запрос на удаление пользователя с id: {}", id);
         userService.delete(id);
     }

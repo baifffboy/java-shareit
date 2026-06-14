@@ -26,8 +26,7 @@ public class ItemMapper {
         item.setName(createItemRequest.getName());
         item.setDescription(createItemRequest.getDescription());
         item.setOwner(owner);
-        if (createItemRequest.getIsAvailable() == null) item.setAvailable(true);
-        else item.setAvailable(createItemRequest.getIsAvailable());
+        item.setAvailable(createItemRequest.getAvailable());
         item.setCountOfRent(0L);
         return item;
     }
@@ -37,8 +36,8 @@ public class ItemMapper {
             existingItem.setName(updateItemRequest.getName());
         if (updateItemRequest.getDescription() != null)
             existingItem.setDescription(updateItemRequest.getDescription());
-        if (updateItemRequest.getIsAvailable() != null)
-            existingItem.setAvailable(updateItemRequest.getIsAvailable());
+        if (updateItemRequest.getAvailable() != null)
+            existingItem.setAvailable(updateItemRequest.getAvailable());
         if (updateItemRequest.getReview() != null) existingItem.getReviews().add(updateItemRequest.getReview());
         return existingItem;
     }

@@ -50,7 +50,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto update(UpdateUserRequest updateUserRequest, Long id) {
-        updateUserRequest.setId(id);
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id " + id + " не найден"));
         boolean emailExists = userRepository.findAll().stream()

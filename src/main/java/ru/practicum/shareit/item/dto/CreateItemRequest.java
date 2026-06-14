@@ -11,5 +11,5 @@ public class CreateItemRequest {
     @NotBlank(message = "Описание вещи не может быть пустым")
     private String description;
     @NotNull
-    private Boolean isAvailable;
+    private Boolean available;
 }
