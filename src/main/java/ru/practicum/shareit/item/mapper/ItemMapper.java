@@ -16,10 +16,13 @@ public interface ItemMapper {
     @Mapping(source = "available", target = "available")
     ItemDto toDto(Item item);
 
+    @Mapping(source = "createItemRequest.name", target = "name")
+    @Mapping(source = "createItemRequest.description", target = "description")
+    @Mapping(source = "createItemRequest.available", target = "available")
     @Mapping(source = "owner", target = "owner")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "reviews", ignore = true)
-    @Mapping(target = "countOfRent", constant = "0")
+    @Mapping(target = "countOfRent", constant = "0L")
     Item toEntity(CreateItemRequest createItemRequest, User owner);
 
     @Mapping(target = "id", ignore = true)
