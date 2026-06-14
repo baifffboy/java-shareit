@@ -26,7 +26,8 @@ public class ItemMapper {
         item.setName(createItemRequest.getName());
         item.setDescription(createItemRequest.getDescription());
         item.setOwner(owner);
-        item.setAvailable(true);
+        if (createItemRequest.getIsAvailable() == null) item.setAvailable(true);
+        else item.setAvailable(createItemRequest.getIsAvailable());
         item.setCountOfRent(0L);
         return item;
     }
