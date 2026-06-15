@@ -1,0 +1,70 @@
+package ru.practicum.shareit.item.controller;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.CreateItemRequest;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.UpdateItemRequest;
+import ru.practicum.shareit.item.service.ItemService;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/items")
+@Slf4j
+@RequiredArgsConstructor
+@Validated
+public class ItemController {
+    private final ItemService itemService;
+
+    @PostMapping
+    public ResponseEntity<ItemDto> createItem(
+            @RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть отрицательным или равным 0") Long userId,
+            @Valid @RequestBody CreateItemRequest createItemRequest) {
+        log.info("Отправлен запрос на создание вещи пользователем с id: {}", userId);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(itemService.create(userId, createItemRequest));
+    }
+
+    @PatchMapping("/{itemId}")
+    public ResponseEntity<ItemDto> updateItem(
+            @RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть отрицательным или равным 0") Long userId,
+            @PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long itemId,
+            @RequestBody UpdateItemRequest updateItemRequest) {
+        log.info("Отправлен запрос на обновление вещи с id: {} пользователем с id: {}", itemId, userId);
+        return ResponseEntity
+                .ok()
+                .body(itemService.update(userId, updateItemRequest, itemId));
+    }
+
+    @GetMapping("/{itemId}")
+    public ResponseEntity<ItemDto> getItem(@PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long itemId) {
+        log.info("Отправлен запрос на получение вещи с id: {}", itemId);
+        return ResponseEntity
+                .ok()
+                .body(itemService.findById(itemId));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ItemDto>> getUserItems(@RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть отрицательным или равным 0") Long userId) {
+        log.info("Отправлен запрос на получение всех вещей пользователя с id: {}", userId);
+        return ResponseEntity
+                .ok()
+                .body(itemService.findByUserId(userId));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ItemDto>> searchItems(@RequestParam String text) {
+        log.info("Отправлен запрос на поиск вещей по тексту: {}", text);
+        return ResponseEntity
+                .ok()
+                .body(itemService.search(text));
+    }
+}

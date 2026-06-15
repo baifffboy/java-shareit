@@ -1,0 +1,33 @@
+package ru.practicum.shareit.item.mapper;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import ru.practicum.shareit.item.dto.CreateItemRequest;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.UpdateItemRequest;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
+
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+public interface ItemMapper {
+
+    @Mapping(source = "available", target = "available")
+    ItemDto toDto(Item item);
+
+    @Mapping(source = "createItemRequest.name", target = "name")
+    @Mapping(source = "createItemRequest.description", target = "description")
+    @Mapping(source = "createItemRequest.available", target = "available")
+    @Mapping(source = "owner", target = "owner")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "reviews", ignore = true)
+    @Mapping(target = "countOfRent", constant = "0L")
+    Item toEntity(CreateItemRequest createItemRequest, User owner);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "owner", ignore = true)
+    @Mapping(target = "reviews", ignore = true)
+    @Mapping(target = "countOfRent", ignore = true)
+    void updateEntity(@MappingTarget Item existingItem, UpdateItemRequest updateItemRequest);
+}

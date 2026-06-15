@@ -1,8 +1,8 @@
-package ru.practicum.shareit.booking.dto;
+package ru.practicum.shareit.booking.model;
 
 import java.time.LocalDateTime;
 
-public class BookingDto {
+public class Booking {
     private Long id;
     private LocalDateTime from;
     private LocalDateTime to;
