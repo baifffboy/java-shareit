@@ -6,11 +6,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class ItemDto {
+public class OwnerItemDto {
     private Long id;
     private String name;
     private String description;
     private boolean available;
     private List<String> comments;
     private Long countOfRent;
+    private LocalDate lastRent;
+    private LocalDate nextRent;
 }

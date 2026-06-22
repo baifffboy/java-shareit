@@ -7,5 +7,5 @@ public class UpdateItemRequest {
     private String name;
     private String description;
     private Boolean available;
-    private String review;
+    private String comment;
 }

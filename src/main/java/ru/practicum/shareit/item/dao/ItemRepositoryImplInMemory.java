@@ -8,9 +8,9 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-@Repository
+@Repository("inMemory")
 @Slf4j
-public class ItemRepositoryImpl implements ItemRepository {
+public class ItemRepositoryImplInMemory implements ItemRepository {
 
     private final Map<Long, Item> items = new HashMap<>();
     private final AtomicLong idGenerator = new AtomicLong(1);

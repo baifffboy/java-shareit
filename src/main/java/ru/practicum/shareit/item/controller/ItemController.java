@@ -8,9 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.dto.CreateItemRequest;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.UpdateItemRequest;
+import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.List;
@@ -33,6 +31,18 @@ public class ItemController {
                 .body(itemService.create(userId, createItemRequest));
     }
 
+    @PostMapping("/{itemId}/comment")
+    public ResponseEntity<ItemDto> createComment(
+        @RequestHeader("X-Sharer-User-Id") Long userId,
+        @PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long itemId,
+        @Valid @RequestBody CreateCommentRequest createCommentRequest
+    ) {
+        log.info("Добавление комментария к вещи с id: {} от пользователя с id: {}", itemId, userId);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(itemService.createComment(userId, createCommentRequest));
+    }
+
     @PatchMapping("/{itemId}")
     public ResponseEntity<ItemDto> updateItem(
             @RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть отрицательным или равным 0") Long userId,
@@ -53,7 +63,7 @@ public class ItemController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ItemDto>> getUserItems(@RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть отрицательным или равным 0") Long userId) {
+    public ResponseEntity<List<OwnerItemDto>> getUserItems(@RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть отрицательным или равным 0") Long userId) {
         log.info("Отправлен запрос на получение всех вещей пользователя с id: {}", userId);
         return ResponseEntity
                 .ok()

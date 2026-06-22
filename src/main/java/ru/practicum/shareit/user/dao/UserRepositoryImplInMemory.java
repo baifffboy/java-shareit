@@ -7,9 +7,9 @@ import ru.practicum.shareit.user.model.User;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
-@Repository
+@Repository("inMemory")
 @Slf4j
-public class UserRepositoryImpl implements UserRepository {
+public class UserRepositoryImplInMemory implements UserRepository {
 
     private final Map<Long, User> users = new HashMap<>();
     private final AtomicLong idGenerator = new AtomicLong(1);
