@@ -26,12 +26,7 @@ public class Item {
     @Column(name = "available")
     private boolean available;
 
-    @OneToMany
-    @JoinTable(
-            name = "comments",
-            joinColumns = @JoinColumn(name = "item_id"),
-            inverseJoinColumns = @JoinColumn(name = "id")
-    )
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @ManyToOne
