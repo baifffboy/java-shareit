@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dao.BookingRepository;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dao.CommentRepository;
 import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.mapper.ItemMapper;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.model.User;
@@ -40,8 +42,25 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    ItemDto createComment(Long userId, CreateCommentRequest createItemRequest) {
+    public ItemDto createComment(Long userId, Long itemId, CreateCommentRequest createCommentRequest) throws ValidationException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден"));
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new NotFoundException("Вещь с id " + itemId + " не найдена"));
+        bookingRepository.findAllByItemIdAndStatusAndEndDateBeforeOrderByEndDateDesc(
+                        itemId,
+                        Status.APPROVED,
+                        LocalDateTime.now()
+                ).stream()
+                .filter(b -> b.getBooker().getId().equals(userId))
+                .findAny()
+                .orElseThrow(() -> new ValidationException(
+                        "Пользователь не арендовал эту вещь или бронирование не завершено"
+                ));
 
+        Comment savedComment = commentRepository.save(itemMapper.toEntity(createCommentRequest, item));
+        item.getComments().add(savedComment.getComment());
+        return itemMapper.toDto(item);
     }
 
     @Override
@@ -71,20 +90,20 @@ public class ItemServiceImpl implements ItemService {
         }
         return itemRepository.findByOwnerId(userId).stream()
                 .map(item -> {
-                    bookingRepository.findFirstByItemIdAndStatusAndEndDateBeforeOrderByEndDateDesc(
-                            item.getId(),
-                            Status.APPROVED,
-                            LocalDateTime.now()
-                    ).ifPresent(lastBooking -> item.setLastRent(lastBooking.getEnd_date().toLocalDate()));
+                            bookingRepository.findFirstByItemIdAndStatusAndEndDateBeforeOrderByEndDateDesc(
+                                    item.getId(),
+                                    Status.APPROVED,
+                                    LocalDateTime.now()
+                            ).ifPresent(lastBooking -> item.setLastRent(lastBooking.getEnd_date().toLocalDate()));
 
-                    bookingRepository.findFirstByItemIdAndStatusAndStartDateAfterOrderByStartDateAsc(
-                            item.getId(),
-                            Status.APPROVED,
-                            LocalDateTime.now()
-                    ).ifPresent(nextBooking -> item.setNextRent(nextBooking.getStart_date().toLocalDate()));
+                            bookingRepository.findFirstByItemIdAndStatusAndStartDateAfterOrderByStartDateAsc(
+                                    item.getId(),
+                                    Status.APPROVED,
+                                    LocalDateTime.now()
+                            ).ifPresent(nextBooking -> item.setNextRent(nextBooking.getStart_date().toLocalDate()));
 
-                    return itemMapper.toDtoOwner(item);
-                }
+                            return itemMapper.toDtoOwner(item);
+                        }
                 )
                 .collect(Collectors.toList());
     }

@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.service;
 
+import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.*;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 public interface ItemService {
     ItemDto create(Long userId, CreateItemRequest createItemRequest);
 
-    ItemDto createComment(Long userId, CreateCommentRequest createItemRequest);
+    ItemDto createComment(Long userId, Long itemId, CreateCommentRequest createItemRequest) throws ValidationException;
 
     ItemDto update(Long userId, UpdateItemRequest updateItemRequest, Long itemId);
 

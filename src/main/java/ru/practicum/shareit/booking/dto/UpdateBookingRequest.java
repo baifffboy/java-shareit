@@ -1,7 +1,10 @@
 package ru.practicum.shareit.booking.dto;
 
 import jakarta.validation.constraints.Positive;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.practicum.shareit.booking.model.Status;
 
 @AllArgsConstructor

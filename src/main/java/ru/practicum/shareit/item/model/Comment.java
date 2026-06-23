@@ -1,9 +1,11 @@
 package ru.practicum.shareit.item.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
 @Table(name = "comments")
+@Getter
 public class Comment {
 
     @Id

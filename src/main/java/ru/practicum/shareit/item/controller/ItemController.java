@@ -33,14 +33,14 @@ public class ItemController {
 
     @PostMapping("/{itemId}/comment")
     public ResponseEntity<ItemDto> createComment(
-        @RequestHeader("X-Sharer-User-Id") Long userId,
-        @PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long itemId,
-        @Valid @RequestBody CreateCommentRequest createCommentRequest
+            @RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть отрицательным или равным 0") Long userId,
+            @PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long itemId,
+            @Valid @RequestBody CreateCommentRequest createCommentRequest
     ) {
         log.info("Добавление комментария к вещи с id: {} от пользователя с id: {}", itemId, userId);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(itemService.createComment(userId, createCommentRequest));
+                .body(itemService.createComment(userId, itemId, createCommentRequest));
     }
 
     @PatchMapping("/{itemId}")

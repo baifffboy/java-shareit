@@ -4,10 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
-import ru.practicum.shareit.item.dto.CreateItemRequest;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.OwnerItemDto;
-import ru.practicum.shareit.item.dto.UpdateItemRequest;
+import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
@@ -36,4 +34,9 @@ public interface ItemMapper {
     @Mapping(target = "lastRent", ignore = true)
     @Mapping(target = "nextRent", ignore = true)
     void updateEntity(@MappingTarget Item existingItem, UpdateItemRequest updateItemRequest);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(source = "createCommentRequest.comment", target = "comment")
+    @Mapping(source = "item", target = "item")
+    Comment toEntity(CreateCommentRequest createCommentRequest, Item item);
 }

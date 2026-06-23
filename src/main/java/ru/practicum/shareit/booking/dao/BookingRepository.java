@@ -1,8 +1,6 @@
 package ru.practicum.shareit.booking.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 
@@ -17,6 +15,13 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     // Последнее завершённое APPROVED бронирование
     Optional<Booking> findFirstByItemIdAndStatusAndEndDateBeforeOrderByEndDateDesc(
+            Long itemId,
+            Status status,
+            LocalDateTime now
+    );
+
+    // Все бронирования вещи которые имели состояние APPROVED до нынешнего момента
+    List<Booking> findAllByItemIdAndStatusAndEndDateBeforeOrderByEndDateDesc(
             Long itemId,
             Status status,
             LocalDateTime now
