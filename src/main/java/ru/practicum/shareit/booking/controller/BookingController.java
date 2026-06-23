@@ -46,7 +46,7 @@ public class BookingController {
                 .body(bookingService.patch(bookingId, approved));
     }
 
-    @GetMapping
+    @GetMapping("/{bookingId}")
     public ResponseEntity<BookingDto> getBookingById(
             @PathVariable("bookingId") @Positive(message = "Id ник может быть отрицательным или равным 0") Long bookingId
     ) {
