@@ -11,7 +11,7 @@ public class OwnerItemDto {
     private String name;
     private String description;
     private boolean available;
-    private List<String> comments;
+    private List<CommentDto> comments;
     private Long countOfRent;
     private LocalDate lastRent;
     private LocalDate nextRent;

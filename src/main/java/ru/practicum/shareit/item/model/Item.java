@@ -26,12 +26,13 @@ public class Item {
     @Column(name = "available")
     private boolean available;
 
-    @ElementCollection
-    @CollectionTable(
+    @OneToMany
+    @JoinTable(
             name = "comments",
-            joinColumns = @JoinColumn(name = "item_id")
+            joinColumns = @JoinColumn(name = "item_id"),
+            inverseJoinColumns = @JoinColumn(name = "id")
     )
-    private List<String> comments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(

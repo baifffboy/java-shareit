@@ -12,8 +12,10 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
-import ru.practicum.shareit.item.dao.ItemRepository;
-import ru.practicum.shareit.user.dao.UserRepository;
+import ru.practicum.shareit.item.dao.ItemRepositoryInDatabase;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.dao.UserRepositoryInDatabase;
+import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,17 +27,19 @@ public class BookingServiceImpl implements BookingService {
 
     private final BookingMapper bookingMapper;
     private final BookingRepository bookingRepository;
-    private final ItemRepository itemRepository;
-    private final UserRepository userRepository;
+    private final ItemRepositoryInDatabase itemRepository;
+    private final UserRepositoryInDatabase userRepository;
 
-    public BookingDto create(CreateBookingRequest createBookingRequest) throws ValidationException {
+    public BookingDto create(CreateBookingRequest createBookingRequest, Long userId) throws ValidationException {
         if (createBookingRequest.getStartDate().isAfter(createBookingRequest.getEndDate()))
             throw new ValidationException("Старт аренды должен быть раньше начала");
-        if (!itemRepository.existsById(createBookingRequest.getItem().getId()))
+        if (!itemRepository.existsById(createBookingRequest.getItemId()))
             throw new NotFoundException("Вещь с данным id не существует");
-        if (!userRepository.existsById(createBookingRequest.getItem().getId()))
+        if (!userRepository.existsById(userId))
             throw new NotFoundException("Пользователь с данным id не существует");
-        Booking booking = bookingMapper.toBookingCreate(createBookingRequest);
+        User user = userRepository.findById(userId).get();
+        Item item = itemRepository.findById(createBookingRequest.getItemId()).get();
+        Booking booking = bookingMapper.toBookingCreate(createBookingRequest, item, user);
         Booking savedBooking = bookingRepository.save(booking);
         log.info("Успешно создано бронирование с id={}", savedBooking.getId());
         return bookingMapper.toDto(savedBooking);

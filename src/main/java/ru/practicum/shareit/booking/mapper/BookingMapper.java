@@ -8,6 +8,8 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.CreateBookingRequest;
 import ru.practicum.shareit.booking.dto.UpdateBookingRequest;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface BookingMapper {
@@ -15,7 +17,9 @@ public interface BookingMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "status", constant = "WAITING")
-    Booking toBookingCreate(CreateBookingRequest createBookingRequest);
+    @Mapping(source = "item", target = "item")
+    @Mapping(source = "user", target = "booker")
+    Booking toBookingCreate(CreateBookingRequest createBookingRequest, Item item, User user);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "startDate", ignore = true)

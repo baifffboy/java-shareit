@@ -7,7 +7,7 @@ import ru.practicum.shareit.exception.ValidationException;
 import java.util.List;
 
 public interface BookingService {
-    BookingDto create(CreateBookingRequest createBookingRequest) throws ValidationException;
+    BookingDto create(CreateBookingRequest createBookingRequest, Long userId) throws ValidationException;
 
     BookingDto patch(Long bookingId, Boolean approved);
 

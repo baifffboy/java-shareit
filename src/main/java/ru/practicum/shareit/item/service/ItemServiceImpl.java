@@ -47,6 +47,7 @@ public class ItemServiceImpl implements ItemService {
                 .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден"));
         Item item = itemRepositoryInDatabase.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Вещь с id " + itemId + " не найдена"));
+
         bookingRepository.findAllByItemIdAndStatusAndEndDateBeforeOrderByEndDateDesc(
                         itemId,
                         Status.APPROVED,
@@ -58,8 +59,15 @@ public class ItemServiceImpl implements ItemService {
                         "Пользователь не арендовал эту вещь или бронирование не завершено"
                 ));
 
-        Comment savedComment = commentRepository.save(itemMapper.toEntity(createCommentRequest, item));
-        item.getComments().add(savedComment.getComment());
+        Comment comment = new Comment();
+        comment.setText(createCommentRequest.getText());
+        comment.setItem(item);
+        comment.setAuthor(user);
+        comment.setCreated(LocalDateTime.now());
+
+        Comment savedComment = commentRepository.save(comment);
+
+        item.getComments().add(savedComment);
         return itemMapper.toDto(item);
     }
 

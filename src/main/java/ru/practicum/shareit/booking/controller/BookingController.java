@@ -27,15 +27,16 @@ public class BookingController {
 
     @PostMapping
     public ResponseEntity<BookingDto> create(
-            @Valid @RequestBody CreateBookingRequest createBookingRequest
+            @Valid @RequestBody CreateBookingRequest createBookingRequest,
+            @RequestHeader("X-Sharer-User-Id") Long userId
     ) throws ValidationException {
         log.info("Создан запрос на бронирование - по умолчанию статус WAITING");
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(bookingService.create(createBookingRequest));
+                .body(bookingService.create(createBookingRequest, userId));
     }
 
-    @PatchMapping
+    @PatchMapping("/{bookingId}")
     public ResponseEntity<BookingDto> patch(
             @PathVariable("bookingId") @Positive(message = "Id ник может быть отрицательным или равным 0") Long bookingId,
             @RequestParam("approved") @NotNull Boolean approved
