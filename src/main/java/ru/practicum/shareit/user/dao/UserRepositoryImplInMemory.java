@@ -7,7 +7,7 @@ import ru.practicum.shareit.user.model.User;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
-@Repository("inMemory")
+@Repository("userInMemory")
 @Slf4j
 public class UserRepositoryImplInMemory implements UserRepository {
 

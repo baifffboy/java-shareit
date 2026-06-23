@@ -29,7 +29,7 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepository userRepository;
 
     public BookingDto create(CreateBookingRequest createBookingRequest) throws ValidationException {
-        if (createBookingRequest.getStart_date().isAfter(createBookingRequest.getEnd_date()))
+        if (createBookingRequest.getStartDate().isAfter(createBookingRequest.getEndDate()))
             throw new ValidationException("Старт аренды должен быть раньше начала");
         if (!itemRepository.existsById(createBookingRequest.getItem().getId()))
             throw new NotFoundException("Вещь с данным id не существует");

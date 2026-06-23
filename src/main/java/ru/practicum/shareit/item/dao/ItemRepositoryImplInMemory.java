@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-@Repository("inMemory")
+@Repository("itemInMemory")
 @Slf4j
 public class ItemRepositoryImplInMemory implements ItemRepository {
 

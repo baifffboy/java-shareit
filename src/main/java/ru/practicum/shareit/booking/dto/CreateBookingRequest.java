@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 @Data
 public class CreateBookingRequest {
     @Future(message = "Дата момента с которого вы хотите взять вещи должна начинаться в будущем")
-    private LocalDateTime start_date;
+    private LocalDateTime startDate;
     @Future(message = "Дата момента по который вы хотите взять вещи должна начинаться в будущем")
-    private LocalDateTime end_date;
+    private LocalDateTime endDate;
     @NotNull
     private Item item;
     @NotNull
