@@ -20,8 +20,8 @@ public class ItemRepositoryImplInMemory implements ItemRepository {
         if (item.getId() == null) {
             item.setId(idGenerator.getAndIncrement());
         }
-        if (item.getReviews() == null) {
-            item.setReviews(new ArrayList<>());
+        if (item.getComments() == null) {
+            item.setComments(new ArrayList<>());
         }
         items.put(item.getId(), item);
         log.debug("Сохранена вещь: {}", item);
