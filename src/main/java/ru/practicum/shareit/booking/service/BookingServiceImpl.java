@@ -50,7 +50,8 @@ public class BookingServiceImpl implements BookingService {
         updateBookingRequest.setId(bookingId);
         if (approved) updateBookingRequest.setStatus(Status.APPROVED);
         else updateBookingRequest.setStatus(Status.REJECTED);
-        Booking existBooking = bookingRepository.getReferenceById(bookingId);
+        Booking existBooking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new NotFoundException("Бронирование с id " + bookingId + " не найдено"));
         Booking patchBooking = bookingMapper.toBookingUpdate(updateBookingRequest, existBooking);
         Booking savedBooking = bookingRepository.save(patchBooking);
         log.info("Успешно обновлен статус бронирования с id={}, теперь статус={}", savedBooking.getId(), savedBooking.getStatus());
@@ -58,9 +59,10 @@ public class BookingServiceImpl implements BookingService {
     }
 
     public BookingDto getBookingById(Long bookingId) {
-        Booking booking = bookingRepository.getReferenceById(bookingId);
-        log.info("Запрос на получение бронирования с id={}", booking.getId());
-        return bookingMapper.toDto(booking);
+        Booking existBooking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new NotFoundException("Бронирование с id " + bookingId + " не найдено"));
+        log.info("Запрос на получение бронирования с id={}", existBooking.getId());
+        return bookingMapper.toDto(existBooking);
     }
 
     public List<BookingDto> getBookingByLeaseholder(Long userId) {

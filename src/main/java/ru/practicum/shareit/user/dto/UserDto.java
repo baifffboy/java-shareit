@@ -1,7 +1,7 @@
 package ru.practicum.shareit.user.dto;
 
 import lombok.Data;
-import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.dto.ItemShortDto;
 
 import java.util.List;
 
@@ -10,6 +10,6 @@ public class UserDto {
     private Long id;
     private String name;
     private String email;
-    private List<Item> demandItem;
-    private List<Item> supplyItem;
+    private List<ItemShortDto> demandItem;
+    private List<ItemShortDto> supplyItem;
 }

@@ -2,7 +2,7 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -13,6 +13,6 @@ public class OwnerItemDto {
     private boolean available;
     private List<CommentDto> comments;
     private Long countOfRent;
-    private LocalDate lastRent;
-    private LocalDate nextRent;
+    private LocalDateTime lastRent;
+    private LocalDateTime nextRent;
 }

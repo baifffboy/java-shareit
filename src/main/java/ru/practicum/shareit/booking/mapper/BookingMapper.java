@@ -8,7 +8,9 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.CreateBookingRequest;
 import ru.practicum.shareit.booking.dto.UpdateBookingRequest;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.item.dto.ItemShortDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.dto.UserShortDto;
 import ru.practicum.shareit.user.model.User;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -27,4 +29,8 @@ public interface BookingMapper {
     @Mapping(target = "item", ignore = true)
     @Mapping(target = "booker", ignore = true)
     Booking toBookingUpdate(UpdateBookingRequest updateBookingRequest, @MappingTarget Booking existBooking);
+
+    ItemShortDto mapItemToShort(Item item);
+
+    UserShortDto mapUserToShort(User user);
 }

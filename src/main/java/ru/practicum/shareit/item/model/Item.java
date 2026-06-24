@@ -1,14 +1,16 @@
 package ru.practicum.shareit.item.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import ru.practicum.shareit.user.model.User;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "items")
 public class Item {
@@ -39,10 +41,10 @@ public class Item {
     private Long countOfRent;
 
     @Column(name = "last_rent")
-    private LocalDate lastRent;
+    private LocalDateTime lastRent;
 
     @Column(name = "next_rent")
-    private LocalDate nextRent;
+    private LocalDateTime nextRent;
     // класс вещи - id, навзание вещи, описание, доступна?,
     // отзыв - можно оставить помле того кк вещь отдали обратно
     // хозяин вещи, количество аренд

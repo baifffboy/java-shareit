@@ -102,13 +102,13 @@ public class ItemServiceImpl implements ItemService {
                                     item.getId(),
                                     Status.APPROVED,
                                     LocalDateTime.now()
-                            ).ifPresent(lastBooking -> item.setLastRent(lastBooking.getEndDate().toLocalDate()));
+                            ).ifPresent(lastBooking -> item.setLastRent(lastBooking.getEndDate()));
 
                             bookingRepository.findFirstByItemIdAndStatusAndStartDateAfterOrderByStartDateAsc(
                                     item.getId(),
                                     Status.APPROVED,
                                     LocalDateTime.now()
-                            ).ifPresent(nextBooking -> item.setNextRent(nextBooking.getStartDate().toLocalDate()));
+                            ).ifPresent(nextBooking -> item.setNextRent(nextBooking.getStartDate()));
 
                             return itemMapper.toDtoOwner(item);
                         }
