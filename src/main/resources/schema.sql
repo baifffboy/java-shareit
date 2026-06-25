@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS items (
   description VARCHAR(256) NOT NULL,
   owner_id BIGINT NOT NULL,
   available BOOLEAN NOT NULL,
-  count_of_rent BIGINT NOT NULL,
+  count_of_rent BIGINT NOT NULL DEFAULT 0,
   last_rent TIMESTAMP,
   next_rent TIMESTAMP,
   CONSTRAINT pk_item PRIMARY KEY (id),

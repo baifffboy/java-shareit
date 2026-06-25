@@ -8,7 +8,7 @@ import java.util.List;
 public interface ItemService {
     ItemDto create(Long userId, CreateItemRequest createItemRequest);
 
-    ItemDto createComment(Long userId, Long itemId, CreateCommentRequest createItemRequest) throws ValidationException;
+    CommentDto createComment(Long userId, Long itemId, CreateCommentRequest createItemRequest) throws ValidationException;
 
     ItemDto update(Long userId, UpdateItemRequest updateItemRequest, Long itemId);
 

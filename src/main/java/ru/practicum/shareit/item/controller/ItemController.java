@@ -33,7 +33,7 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/comment")
-    public ResponseEntity<ItemDto> createComment(
+    public ResponseEntity<CommentDto> createComment(
             @RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть отрицательным или равным 0") Long userId,
             @PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long itemId,
             @Valid @RequestBody CreateCommentRequest createCommentRequest

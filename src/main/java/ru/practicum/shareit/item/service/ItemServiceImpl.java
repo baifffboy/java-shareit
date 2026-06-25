@@ -10,6 +10,7 @@ import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dao.CommentRepository;
 import ru.practicum.shareit.item.dao.ItemRepositoryInDatabase;
 import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
@@ -27,6 +28,7 @@ public class ItemServiceImpl implements ItemService {
 
     private final UserRepositoryInDatabase userRepository;
     private final ItemMapper itemMapper;
+    private final CommentMapper commentMapper;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
     private final ItemRepositoryInDatabase itemRepositoryInDatabase;
@@ -42,7 +44,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto createComment(Long userId, Long itemId, CreateCommentRequest createCommentRequest) throws ValidationException {
+    public CommentDto createComment(Long userId, Long itemId, CreateCommentRequest createCommentRequest) throws ValidationException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id " + userId + " не найден"));
         Item item = itemRepositoryInDatabase.findById(itemId)
@@ -66,9 +68,7 @@ public class ItemServiceImpl implements ItemService {
         comment.setCreated(LocalDateTime.now());
 
         Comment savedComment = commentRepository.save(comment);
-
-        item.getComments().add(savedComment);
-        return itemMapper.toDto(item);
+        return commentMapper.toDto(savedComment);
     }
 
     @Override
