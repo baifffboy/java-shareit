@@ -53,9 +53,11 @@ public class BookingServiceImpl implements BookingService {
     }
 
     public BookingDto patch(Long bookingId, Boolean approved, Long userId) throws ValidationException {
+        if (!userRepository.existsById(userId))
+            throw new NotFoundException("Пользователь с данным id не существует");
         Optional<Booking> booking = bookingRepository.findById(bookingId);
         if (booking.isPresent()) {
-            if (!booking.get().getItem().getOwner().equals(userRepository.findById(userId)))
+            if (!booking.get().getItem().getOwner().equals(userRepository.findById(userId).get()))
                 throw new ValidationException("Одобрить бронирование может только владелец данной вещи");
         } else throw new ValidationException("Некорректно введено id бронирования");
         UpdateBookingRequest updateBookingRequest = new UpdateBookingRequest();
