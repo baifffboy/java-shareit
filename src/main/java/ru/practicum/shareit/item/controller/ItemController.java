@@ -35,7 +35,7 @@ public class ItemController {
     @PostMapping("/{itemId}/comment")
     public ResponseEntity<CommentDto> createComment(
             @RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть отрицательным или равным 0") Long userId,
-            @PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long itemId,
+            @PathVariable("itemId") @Positive(message = "id не может быть отрицательным или равным 0") Long itemId,
             @Valid @RequestBody CreateCommentRequest createCommentRequest
     ) throws ValidationException {
         log.info("Добавление комментария к вещи с id: {} от пользователя с id: {}", itemId, userId);
@@ -46,8 +46,8 @@ public class ItemController {
 
     @PatchMapping("/{itemId}")
     public ResponseEntity<ItemDto> updateItem(
-            @RequestHeader("X-Sharer-User-Id") @Positive(message = "id не может быть отрицательным или равным 0") Long userId,
-            @PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long itemId,
+            @RequestHeader(value = "X-Sharer-User-Id", required = false) @Positive(message = "id не может быть отрицательным или равным 0") Long userId,
+            @PathVariable("itemId") @Positive(message = "id не может быть отрицательным или равным 0") Long itemId,
             @RequestBody UpdateItemRequest updateItemRequest) {
         log.info("Отправлен запрос на обновление вещи с id: {} пользователем с id: {}", itemId, userId);
         return ResponseEntity

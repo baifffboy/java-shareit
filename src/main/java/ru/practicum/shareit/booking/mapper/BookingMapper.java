@@ -24,8 +24,8 @@ public interface BookingMapper {
     Booking toBookingCreate(CreateBookingRequest createBookingRequest, Item item, User user);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "startDate", ignore = true)
-    @Mapping(target = "endDate", ignore = true)
+    @Mapping(target = "start", ignore = true)
+    @Mapping(target = "end", ignore = true)
     @Mapping(target = "item", ignore = true)
     @Mapping(target = "booker", ignore = true)
     Booking toBookingUpdate(UpdateBookingRequest updateBookingRequest, @MappingTarget Booking existBooking);

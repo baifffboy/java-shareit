@@ -50,7 +50,7 @@ public class ItemServiceImpl implements ItemService {
         Item item = itemRepositoryInDatabase.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Вещь с id " + itemId + " не найдена"));
 
-        bookingRepository.findAllByItemIdAndStatusAndEndDateBeforeOrderByEndDateDesc(
+        bookingRepository.findAllByItem_IdAndStatusAndEndBeforeOrderByEndDesc(
                         itemId,
                         Status.APPROVED,
                         LocalDateTime.now()
@@ -98,17 +98,17 @@ public class ItemServiceImpl implements ItemService {
         }
         return itemRepositoryInDatabase.findByOwnerId(userId).stream()
                 .map(item -> {
-                            bookingRepository.findFirstByItemIdAndStatusAndEndDateBeforeOrderByEndDateDesc(
+                            bookingRepository.findFirstByItem_IdAndStatusAndEndBeforeOrderByEndDesc(
                                     item.getId(),
                                     Status.APPROVED,
                                     LocalDateTime.now()
-                            ).ifPresent(lastBooking -> item.setLastRent(lastBooking.getEndDate()));
+                            ).ifPresent(lastBooking -> item.setLastRent(lastBooking.getEnd()));
 
-                            bookingRepository.findFirstByItemIdAndStatusAndStartDateAfterOrderByStartDateAsc(
+                            bookingRepository.findFirstByItem_IdAndStatusAndStartAfterOrderByStartAsc(
                                     item.getId(),
                                     Status.APPROVED,
                                     LocalDateTime.now()
-                            ).ifPresent(nextBooking -> item.setNextRent(nextBooking.getStartDate()));
+                            ).ifPresent(nextBooking -> item.setNextRent(nextBooking.getStart()));
 
                             return itemMapper.toDtoOwner(item);
                         }

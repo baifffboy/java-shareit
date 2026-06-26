@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 @Data
 public class BookingDto {
     private Long id;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDateTime start;
+    private LocalDateTime end;
     private Status status;
     private ItemShortDto item;
     private UserShortDto booker;

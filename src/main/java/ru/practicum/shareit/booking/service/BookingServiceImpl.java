@@ -31,7 +31,7 @@ public class BookingServiceImpl implements BookingService {
     private final UserRepositoryInDatabase userRepository;
 
     public BookingDto create(CreateBookingRequest createBookingRequest, Long userId) throws ValidationException {
-        if (createBookingRequest.getStartDate().isAfter(createBookingRequest.getEndDate()))
+        if (createBookingRequest.getStart().isAfter(createBookingRequest.getEnd()))
             throw new ValidationException("Старт аренды должен быть раньше начала");
         if (!itemRepository.existsById(createBookingRequest.getItemId()))
             throw new NotFoundException("Вещь с данным id не существует");
@@ -67,7 +67,7 @@ public class BookingServiceImpl implements BookingService {
 
     public List<BookingDto> getBookingByLeaseholder(Long userId) {
         log.info("Запрос на коллецию бронирований у арендатора");
-        return bookingRepository.findByBookerIdOrderByStartDateDesc(userId).stream()
+        return bookingRepository.findByBooker_IdOrderByStartDesc(userId).stream()
                 .map(bookingMapper::toDto)
                 .collect(Collectors.toList());
     }
@@ -76,7 +76,7 @@ public class BookingServiceImpl implements BookingService {
         if (!userRepository.existsById(userId))
             throw new NotFoundException("Пользователь с данным id не существует");
         log.info("Запрос на коллецию бронирований у арендодателя (сколько вещей у него забронировали)");
-        return bookingRepository.findByItemOwnerIdOrderByStartDateDesc(userId).stream()
+        return bookingRepository.findByItem_Owner_IdOrderByStartDesc(userId).stream()
                 .map(bookingMapper::toDto)
                 .collect(Collectors.toList());
     }

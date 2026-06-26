@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUser(@PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long id) {
+    public ResponseEntity<UserDto> getUser(@PathVariable("id") @Positive(message = "id не может быть отрицательным или равным 0") Long id) {
         log.info("Отправлен запрос на получение пользователя с id: {}", id);
         return ResponseEntity
                 .ok()
@@ -48,7 +48,8 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long id, @Valid @RequestBody UpdateUserRequest updateUserRequest) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable("id") @Positive(message = "id не может быть отрицательным или равным 0") Long id,
+                                              @Valid @RequestBody UpdateUserRequest updateUserRequest) {
         log.info("Отправлен запрос на обновление пользователя с id: {}", id);
         return ResponseEntity
                 .ok()
@@ -56,7 +57,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") @Positive(message = "id не может быть отрицательным или равным 0") Long id) {
         log.info("Отправлен запрос на удаление пользователя с id: {}", id);
         userService.delete(id);
         return ResponseEntity

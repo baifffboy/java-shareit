@@ -19,10 +19,10 @@ public class Booking {
     private Long id;
 
     @Column(name = "start_date")
-    private LocalDateTime startDate;
+    private LocalDateTime start;
 
     @Column(name = "end_date")
-    private LocalDateTime endDate;
+    private LocalDateTime end;
 
     @Enumerated(EnumType.STRING)
     private Status status;
