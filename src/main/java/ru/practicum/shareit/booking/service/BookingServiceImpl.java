@@ -57,7 +57,7 @@ public class BookingServiceImpl implements BookingService {
         Booking existBooking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Бронирование с id " + bookingId + " не найдено"));
         if (!existBooking.getItem().getOwner().getId().equals(userId))
-            throw new NotFoundException("Пользователь не является владельцем вещи");
+            throw new ValidationException("Пользователь не является владельцем вещи");
         UpdateBookingRequest updateBookingRequest = new UpdateBookingRequest();
         updateBookingRequest.setId(bookingId);
         if (approved) updateBookingRequest.setStatus(Status.APPROVED);
