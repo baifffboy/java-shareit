@@ -9,7 +9,7 @@ import java.util.List;
 public interface BookingService {
     BookingDto create(CreateBookingRequest createBookingRequest, Long userId) throws ValidationException;
 
-    BookingDto patch(Long bookingId, Boolean approved);
+    BookingDto patch(Long bookingId, Boolean approved, Long userId) throws ValidationException;
 
     BookingDto getBookingById(Long bookingId);
 

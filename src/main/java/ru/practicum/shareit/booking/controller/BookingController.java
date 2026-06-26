@@ -38,13 +38,14 @@ public class BookingController {
 
     @PatchMapping("/{bookingId}")
     public ResponseEntity<BookingDto> patch(
+            @RequestHeader("X-Sharer-User-Id") Long userId,
             @PathVariable("bookingId") @Positive(message = "Id ник может быть отрицательным или равным 0") Long bookingId,
             @RequestParam("approved") @NotNull Boolean approved
-    ) {
+    ) throws ValidationException {
         log.info("Значение status у id={} изменено на {}", bookingId, approved);
         return ResponseEntity
                 .ok()
-                .body(bookingService.patch(bookingId, approved));
+                .body(bookingService.patch(bookingId, approved, userId));
     }
 
     @GetMapping("/{bookingId}")
