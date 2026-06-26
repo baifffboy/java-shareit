@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(NotFoundException ex) {
+    public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGeneric(Exception ex) {
+    public ResponseEntity<ErrorResponse> handleServerException(Exception ex) {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse(ex.getMessage()));
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(ex.getMessage()));
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<ErrorResponse> handleValidation(ForbiddenException ex) {
+    public ResponseEntity<ErrorResponse> handleForbiddenException(ForbiddenException ex) {
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
                 .body(new ErrorResponse(ex.getMessage()));
