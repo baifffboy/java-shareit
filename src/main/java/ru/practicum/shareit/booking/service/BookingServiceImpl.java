@@ -73,6 +73,8 @@ public class BookingServiceImpl implements BookingService {
     }
 
     public List<BookingDto> getBookingByOwner(Long userId) {
+        if (!userRepository.existsById(userId))
+            throw new NotFoundException("Пользователь с данным id не существует");
         log.info("Запрос на коллецию бронирований у арендодателя (сколько вещей у него забронировали)");
         return bookingRepository.findByItemOwnerIdOrderByStartDateDesc(userId).stream()
                 .map(bookingMapper::toDto)
