@@ -56,7 +56,7 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
-    public ResponseEntity<ItemDto> getItem(@PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long itemId) {
+    public ResponseEntity<OwnerItemDto> getItem(@PathVariable @Positive(message = "id не может быть отрицательным или равным 0") Long itemId) {
         log.info("Отправлен запрос на получение вещи с id: {}", itemId);
         return ResponseEntity
                 .ok()

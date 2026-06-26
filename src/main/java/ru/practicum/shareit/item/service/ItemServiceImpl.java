@@ -85,10 +85,10 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto findById(Long id) {
+    public OwnerItemDto findById(Long id) {
         Item item = itemRepositoryInDatabase.findById(id)
                 .orElseThrow(() -> new NotFoundException("Вещь с id " + id + " не найдена"));
-        return itemMapper.toDto(item);
+        return itemMapper.toDtoOwner(item);
     }
 
     @Override

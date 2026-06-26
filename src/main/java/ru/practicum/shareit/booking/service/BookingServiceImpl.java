@@ -10,6 +10,7 @@ import ru.practicum.shareit.booking.dto.UpdateBookingRequest;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
+import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dao.ItemRepositoryInDatabase;
@@ -58,7 +59,7 @@ public class BookingServiceImpl implements BookingService {
         Optional<Booking> booking = bookingRepository.findById(bookingId);
         if (booking.isPresent()) {
             if (!booking.get().getItem().getOwner().equals(userRepository.findById(userId).get()))
-                throw new ValidationException("Одобрить бронирование может только владелец данной вещи");
+                throw new ForbiddenException("Одобрить бронирование может только владелец данной вещи");
         } else throw new ValidationException("Некорректно введено id бронирования");
         UpdateBookingRequest updateBookingRequest = new UpdateBookingRequest();
         updateBookingRequest.setId(bookingId);
