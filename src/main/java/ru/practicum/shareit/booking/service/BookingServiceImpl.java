@@ -56,17 +56,14 @@ public class BookingServiceImpl implements BookingService {
     public BookingDto patch(Long bookingId, Boolean approved, Long userId) throws ValidationException {
         if (!userRepository.existsById(userId))
             throw new NotFoundException("Пользователь с данным id не существует");
-        Optional<Booking> booking = bookingRepository.findById(bookingId);
-        if (booking.isPresent()) {
-            if (!booking.get().getItem().getOwner().getId().equals(userId))
-                throw new ForbiddenException("Одобрить бронирование может только владелец данной вещи");
-        } else throw new ValidationException("Некорректно введено id бронирования");
+        Booking existBooking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new NotFoundException("Бронирование с id " + bookingId + " не найдено"));
+        if (!existBooking.getItem().getOwner().getId().equals(userId))
+            throw new ForbiddenException("Пользователь не является владельцем вещи");
         UpdateBookingRequest updateBookingRequest = new UpdateBookingRequest();
         updateBookingRequest.setId(bookingId);
         if (approved) updateBookingRequest.setStatus(Status.APPROVED);
         else updateBookingRequest.setStatus(Status.REJECTED);
-        Booking existBooking = bookingRepository.findById(bookingId)
-                .orElseThrow(() -> new NotFoundException("Бронирование с id " + bookingId + " не найдено"));
         Booking patchBooking = bookingMapper.toBookingUpdate(updateBookingRequest, existBooking);
         Booking savedBooking = bookingRepository.save(patchBooking);
         log.info("Успешно обновлен статус бронирования с id={}, теперь статус={}", savedBooking.getId(), savedBooking.getStatus());
