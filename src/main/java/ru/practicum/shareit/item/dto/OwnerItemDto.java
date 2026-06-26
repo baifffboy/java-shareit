@@ -13,6 +13,6 @@ public class OwnerItemDto {
     private boolean available;
     private List<CommentDto> comments;
     private Long countOfRent;
-    private LocalDateTime lastRent;
-    private LocalDateTime nextRent;
+    private LocalDateTime lastBooking;
+    private LocalDateTime nextBooking;
 }

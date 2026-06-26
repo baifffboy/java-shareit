@@ -25,15 +25,15 @@ public interface ItemMapper {
     @Mapping(target = "comments", ignore = true)
     @Mapping(source = "owner", target = "owner")
     @Mapping(target = "countOfRent", constant = "0L")
-    @Mapping(target = "lastRent", ignore = true)
-    @Mapping(target = "nextRent", ignore = true)
+    @Mapping(target = "lastBooking", ignore = true)
+    @Mapping(target = "nextBooking", ignore = true)
     Item toEntity(CreateItemRequest createItemRequest, User owner);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "owner", ignore = true)
     @Mapping(target = "comments", ignore = true)
     @Mapping(target = "countOfRent", ignore = true)
-    @Mapping(target = "lastRent", ignore = true)
-    @Mapping(target = "nextRent", ignore = true)
+    @Mapping(target = "lastBooking", ignore = true)
+    @Mapping(target = "nextBooking", ignore = true)
     void updateEntity(@MappingTarget Item existingItem, UpdateItemRequest updateItemRequest);
 }

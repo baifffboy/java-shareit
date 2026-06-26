@@ -46,7 +46,7 @@ public class ItemController {
 
     @PatchMapping("/{itemId}")
     public ResponseEntity<ItemDto> updateItem(
-            @RequestHeader(value = "X-Sharer-User-Id", required = false) @Positive(message = "id не может быть отрицательным или равным 0") Long userId,
+            @RequestHeader(value = "X-Sharer-User-Id") @Positive(message = "id не может быть отрицательным или равным 0") Long userId,
             @PathVariable("itemId") @Positive(message = "id не может быть отрицательным или равным 0") Long itemId,
             @RequestBody UpdateItemRequest updateItemRequest) {
         log.info("Отправлен запрос на обновление вещи с id: {} пользователем с id: {}", itemId, userId);

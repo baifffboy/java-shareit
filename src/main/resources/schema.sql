@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS items (
   owner_id BIGINT NOT NULL,
   available BOOLEAN NOT NULL,
   count_of_rent BIGINT NOT NULL DEFAULT 0,
-  last_rent TIMESTAMP,
-  next_rent TIMESTAMP,
+  last_booking TIMESTAMP,
+  next_booking TIMESTAMP,
   CONSTRAINT pk_item PRIMARY KEY (id),
   CONSTRAINT fk_items_owner FOREIGN KEY (owner_id) REFERENCES users(id)
 );

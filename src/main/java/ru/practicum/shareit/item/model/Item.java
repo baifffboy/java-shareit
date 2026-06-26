@@ -40,11 +40,11 @@ public class Item {
     @Column(name = "count_of_rent")
     private Long countOfRent;
 
-    @Column(name = "last_rent")
-    private LocalDateTime lastRent;
+    @Column(name = "last_booking")
+    private LocalDateTime lastBooking;
 
-    @Column(name = "next_rent")
-    private LocalDateTime nextRent;
+    @Column(name = "next_booking")
+    private LocalDateTime nextBooking;
     // класс вещи - id, навзание вещи, описание, доступна?,
     // отзыв - можно оставить помле того кк вещь отдали обратно
     // хозяин вещи, количество аренд
