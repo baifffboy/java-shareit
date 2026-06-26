@@ -10,6 +10,7 @@ import ru.practicum.shareit.booking.dto.UpdateBookingRequest;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
+import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dao.ItemRepositoryInDatabase;
@@ -52,12 +53,10 @@ public class BookingServiceImpl implements BookingService {
     }
 
     public BookingDto patch(Long bookingId, Boolean approved, Long userId) throws ValidationException {
-        if (!userRepository.existsById(userId))
-            throw new NotFoundException("Пользователь с данным id не существует");
         Booking existBooking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Бронирование с id " + bookingId + " не найдено"));
         if (!existBooking.getItem().getOwner().getId().equals(userId))
-            throw new ValidationException("Пользователь не является владельцем вещи");
+            throw new ForbiddenException("Пользователь не является владельцем вещи");
         UpdateBookingRequest updateBookingRequest = new UpdateBookingRequest();
         updateBookingRequest.setId(bookingId);
         if (approved) updateBookingRequest.setStatus(Status.APPROVED);
