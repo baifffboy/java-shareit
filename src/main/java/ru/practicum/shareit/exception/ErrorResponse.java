@@ -1,4 +1,7 @@
 package ru.practicum.shareit.exception;
 
-public record ErrorResponse(String error) {
+public class ErrorResponse extends RuntimeException {
+    public ErrorResponse(final String ex) {
+        super(ex);
+    }
 }

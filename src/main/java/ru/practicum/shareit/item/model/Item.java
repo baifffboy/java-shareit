@@ -1,20 +1,52 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.practicum.shareit.user.model.User;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@Entity
+@Table(name = "items")
+@NoArgsConstructor
 public class Item {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "description", nullable = false)
     private String description;
+
+    @Column(name = "available")
     private boolean available;
-    private List<String> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(
+            name = "owner_id"
+    )
     private User owner;
+
+    @Column(name = "count_of_rent")
     private Long countOfRent;
+
+    @Column(name = "last_booking")
+    private LocalDateTime lastBooking;
+
+    @Column(name = "next_booking")
+    private LocalDateTime nextBooking;
     // класс вещи - id, навзание вещи, описание, доступна?,
     // отзыв - можно оставить помле того кк вещь отдали обратно
     // хозяин вещи, количество аренд

@@ -3,7 +3,7 @@ package ru.practicum.shareit.user.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.dto.ItemShortDto;
 
 @Data
 public class CreateUserRequest {
@@ -12,6 +12,6 @@ public class CreateUserRequest {
     @Email
     @NotBlank
     private String email;
-    private Item demandItem;
-    private Item supplyItem;
+    private ItemShortDto demandItem;
+    private ItemShortDto supplyItem;
 }

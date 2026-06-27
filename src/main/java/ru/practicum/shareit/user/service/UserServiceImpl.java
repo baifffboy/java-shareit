@@ -20,55 +20,56 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
+    private final UserRepository userRepositoryInDatabase;
     private final UserMapper userMapper;
 
     @Override
     public UserDto create(CreateUserRequest createUserRequest) {
-        boolean emailExists = userRepository.findAll().stream()
+        boolean emailExists = userRepositoryInDatabase.findAll().stream()
                 .anyMatch(user -> user.getEmail().equals(createUserRequest.getEmail()));
         if (emailExists)
             throw new ConflictException("Пользователь с почтой " + createUserRequest.getEmail() + " уже существует");
         User user = userMapper.toEntity(createUserRequest);
-        User savedUser = userRepository.save(user);
+        User savedUser = userRepositoryInDatabase.save(user);
         log.info("Создан пользователь с id: {}", savedUser.getId());
         return userMapper.toDto(savedUser);
     }
 
     @Override
     public UserDto findById(Long id) {
-        User user = userRepository.findById(id)
+        User user = userRepositoryInDatabase.findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id " + id + " не найден"));
         return userMapper.toDto(user);
     }
 
     @Override
     public List<UserDto> findAll() {
-        return userRepository.findAll().stream()
+        return userRepositoryInDatabase.findAll().stream()
                 .map(userMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public UserDto update(UpdateUserRequest updateUserRequest, Long id) {
-        User existingUser = userRepository.findById(id)
+        User existingUser = userRepositoryInDatabase.findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id " + id + " не найден"));
-        boolean emailExists = userRepository.findAll().stream()
+        boolean emailExists = userRepositoryInDatabase.findAll().stream()
                 .anyMatch(user -> !user.getId().equals(id)
                         && user.getEmail().equals(updateUserRequest.getEmail()));
         if (emailExists)
             throw new ConflictException("Пользователь с почтой " + updateUserRequest.getEmail() + " уже существует");
         userMapper.updateEntity(existingUser, updateUserRequest);
-        User updatedUser = userRepository.update(existingUser);
+        User updatedUser = userRepositoryInDatabase.save(existingUser);
         log.info("Обновлен пользователь с id: {}", updatedUser.getId());
         return userMapper.toDto(updatedUser);
     }
 
     @Override
     public void delete(Long id) {
-        if (!userRepository.existsById(id))
+        if (!userRepositoryInDatabase.existsById(id))
             throw new NotFoundException("Пользователь с id " + id + " не найден");
-        userRepository.delete(id);
+        User user = userRepositoryInDatabase.findById(id).orElseThrow(() -> new NotFoundException("Пользователоя не существует"));
+        userRepositoryInDatabase.delete(user);
         log.info("Удален пользователь с id: {}", id);
     }
 }
