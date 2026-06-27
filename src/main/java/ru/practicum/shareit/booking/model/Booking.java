@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Table(name = "bookings")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Booking {
 
     @Id

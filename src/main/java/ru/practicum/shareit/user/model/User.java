@@ -2,6 +2,7 @@ package ru.practicum.shareit.user.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "users")
+@NoArgsConstructor
 public class User {
 
     @Id

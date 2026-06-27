@@ -13,9 +13,9 @@ import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.exception.ForbiddenException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
-import ru.practicum.shareit.item.dao.ItemRepositoryInDatabase;
+import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.dao.UserRepositoryInDatabase;
+import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
@@ -28,24 +28,17 @@ public class BookingServiceImpl implements BookingService {
 
     private final BookingMapper bookingMapper;
     private final BookingRepository bookingRepository;
-    private final ItemRepositoryInDatabase itemRepository;
-    private final UserRepositoryInDatabase userRepository;
+    private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
 
     public BookingDto create(CreateBookingRequest createBookingRequest, Long userId) throws ValidationException {
-        if (!userRepository.existsById(userId))
-            throw new NotFoundException("Пользователь с данным id не существует");
-        if (!itemRepository.existsById(createBookingRequest.getItemId()))
-            throw new NotFoundException("Вещь с данным id не существует");
-        else {
-            Item item = itemRepository.findById(createBookingRequest.getItemId()).get();
-            if (!item.isAvailable()) throw new ValidationException("Вещь забронирована кем-то другим");
-        }
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь с данным id не существует"));
+        Item item = itemRepository.findById(createBookingRequest.getItemId()).orElseThrow(() -> new NotFoundException("Вещь с данным id не существует"));
+        if (!item.isAvailable()) throw new ValidationException("Вещь забронирована кем-то другим");
         if (createBookingRequest.getStart().isAfter(createBookingRequest.getEnd()))
             throw new ValidationException("Старт аренды должен быть раньше начала");
         if (createBookingRequest.getStart().equals(createBookingRequest.getEnd()))
             throw new ValidationException("Время начала и конца не могут совпадать");
-        User user = userRepository.findById(userId).get();
-        Item item = itemRepository.findById(createBookingRequest.getItemId()).get();
         Booking booking = bookingMapper.toBookingCreate(createBookingRequest, item, user);
         Booking savedBooking = bookingRepository.save(booking);
         log.info("Успешно создано бронирование с id={}", savedBooking.getId());

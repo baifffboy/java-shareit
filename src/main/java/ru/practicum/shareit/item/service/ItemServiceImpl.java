@@ -8,13 +8,13 @@ import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dao.CommentRepository;
-import ru.practicum.shareit.item.dao.ItemRepositoryInDatabase;
+import ru.practicum.shareit.item.dao.ItemRepository;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.dao.UserRepositoryInDatabase;
+import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
@@ -26,12 +26,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
-    private final UserRepositoryInDatabase userRepository;
+    private final UserRepository userRepository;
     private final ItemMapper itemMapper;
     private final CommentMapper commentMapper;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
-    private final ItemRepositoryInDatabase itemRepositoryInDatabase;
+    private final ItemRepository itemRepositoryInDatabase;
 
     @Override
     public ItemDto create(Long userId, CreateItemRequest createItemRequest) {

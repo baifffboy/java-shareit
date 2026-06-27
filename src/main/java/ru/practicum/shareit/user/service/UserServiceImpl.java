@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.user.dao.UserRepositoryInDatabase;
+import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.dto.CreateUserRequest;
 import ru.practicum.shareit.user.dto.UpdateUserRequest;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserRepositoryInDatabase userRepositoryInDatabase;
+    private final UserRepository userRepositoryInDatabase;
     private final UserMapper userMapper;
 
     @Override
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
     public void delete(Long id) {
         if (!userRepositoryInDatabase.existsById(id))
             throw new NotFoundException("Пользователь с id " + id + " не найден");
-        User user = userRepositoryInDatabase.findById(id).get();
+        User user = userRepositoryInDatabase.findById(id).orElseThrow(() -> new NotFoundException("Пользователоя не существует"));
         userRepositoryInDatabase.delete(user);
         log.info("Удален пользователь с id: {}", id);
     }
