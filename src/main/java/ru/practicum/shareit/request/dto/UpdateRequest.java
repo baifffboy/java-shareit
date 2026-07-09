@@ -8,6 +8,6 @@ public class UpdateRequest {
     @Positive(message = "id не может быть отрицательным или равным 0")
     private Long id;
     private Item request;
-    private boolean isActual;
+    private boolean status;
     private User requestUser;
 }

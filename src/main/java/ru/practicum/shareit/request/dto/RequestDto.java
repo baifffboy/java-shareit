@@ -1,11 +1,15 @@
 package ru.practicum.shareit.request.dto;
 
-import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.model.User;
+import lombok.Data;
+import ru.practicum.shareit.item.dto.ItemShortDto;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Data
 public class RequestDto {
     private Long id;
-    private Item request;
-    private boolean isActual;
-    private User requestUser;
+    private String description;
+    private LocalDateTime created;
+    private List<ItemShortDto> responses;
 }
